@@ -1,27 +1,31 @@
 // @flow
 
 import React, { Component } from 'react'
-import { Platform, StyleSheet, Text, View } from 'react-native'
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu'
-})
+import { AppState, StyleSheet, StatusBar, View } from 'react-native'
+import AppNavigator from './Navigator'
+const { loadData } = require('./Actions')
 
 export default class App extends Component<any, any> {
+  componentDidMount () {
+    AppState.addEventListener('change', this.handleAppStateChange)
+    this.props.dispatch(loadData())
+  }
+
+  componentWillUnmount () {
+    AppState.removeEventListener('change', this.handleAppStateChange)
+  }
+
+  handleAppStateChange = appState => {
+    if (appState === 'active') {
+      this.props.dispatch(loadData())
+    }
+  };
+
   render () {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
+        <StatusBar backgroundColor='black' translucent />
+        <AppNavigator />
       </View>
     )
   }
