@@ -5,10 +5,10 @@ import { getCurrentData } from './Selectors'
 
 function * realm () {
   while (true) {
-    yield take('LOAD_DATA')
+    yield take('LOADED_DATA')
 
     const data = yield select(getCurrentData)
-    yield put(addMany(data))
+    addMany(data)
   }
 }
 
