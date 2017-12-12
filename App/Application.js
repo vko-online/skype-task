@@ -1,11 +1,12 @@
 // @flow
 
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { AppState, StyleSheet, StatusBar, View } from 'react-native'
 import AppNavigator from './Navigator'
 const { loadData } = require('./Actions')
+const { connect } = require('react-redux')
 
-export default class App extends Component<any, any> {
+class Application extends PureComponent<any, any> {
   componentDidMount () {
     AppState.addEventListener('change', this.handleAppStateChange)
     this.props.dispatch(loadData())
@@ -49,3 +50,5 @@ const styles = StyleSheet.create({
     marginBottom: 5
   }
 })
+
+export default connect()(Application)
