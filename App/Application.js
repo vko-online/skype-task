@@ -3,22 +3,31 @@
 import React, { PureComponent } from 'react'
 import { AppState, StyleSheet, StatusBar, View } from 'react-native'
 import AppNavigator from './Navigator'
+import { setInterval } from 'core-js/library/web/timers'
 const { loadData } = require('./Actions')
 const { connect } = require('react-redux')
 
 class Application extends PureComponent<any, any> {
-  componentDidMount () {
+  intervalId = null
+  componentDidMount = () => {
     AppState.addEventListener('change', this.handleAppStateChange)
-    this.props.dispatch(loadData())
+    this.load()
+    this.intervalId = setInterval(this.load, 5000)
   }
 
-  componentWillUnmount () {
+  componentWillUnmount = () => {
     AppState.removeEventListener('change', this.handleAppStateChange)
+  }
+
+  load = () => {
+    this.props.dispatch(loadData())
   }
 
   handleAppStateChange = appState => {
     if (appState === 'active') {
-      this.props.dispatch(loadData())
+      this.load()
+    } else {
+      clearInterval(this.intervalId)
     }
   };
 

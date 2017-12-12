@@ -4,8 +4,20 @@ import { Dispatch, ThunkAction } from './Types'
 const API_URL = 'https://poloniex.com/public?command=returnTicker' // returns html page with recaptcha
 const dataJson = require('./data.json')
 
-function normalize (data) {
+function normalize (data, randomize = true) {
   const names = Object.keys(data)
+  if (randomize) {
+    const rnd = Math.floor(Math.random() * names.length) + 1
+    return names
+      .map(name => {
+        return {
+          name: name,
+          highestBid: Number(data[name].highestBid),
+          percentChange: Number(data[name].percentChange)
+        }
+      })
+      .slice(rnd)
+  }
   return names.map(name => {
     return {
       name: name,

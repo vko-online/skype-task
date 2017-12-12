@@ -12,7 +12,7 @@ const initialTabState = 'first'
 function data (state: DataState = initialDataState, action: Action): State {
   switch (action.type) {
     case 'LOADED_DATA':
-      return [...state, ...action.list]
+      return action.list
   }
   return state
 }
